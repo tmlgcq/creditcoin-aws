@@ -72,7 +72,7 @@ ExecStartPre=/bin/rm -f %t/%n.ctr-id
 # Used sh to source variables and call podman as systemd was giving me fits.
 # Google it - the pain is real.
 #
-ExecStart=sh -c 'source /etc/bccmn.env && /usr/bin/podman run --security-opt label=type:ctcmn-container.process --cidfile=%t/%n.ctr-id --cgroups=no-conmon --rm --sdnotify=conmon --replace --name ctcmn-container --detach -p 30333:30333 -v /app/ccmn:/data gluwa/creditcoin:latest --validator --name ctcmn-DEFAULT-$NID --prometheus-external --telemetry-url "wss://telemetry.polkadot.io/submit/ 0" --bootnodes /dns4/bootnode.creditcoin.network/tcp/30333/p2p/12D3KooWAEgDL126EUFxFfdQKiUhmx3BJPdszQHu9PsYsLCuavhb /dns4/bootnode2.creditcoin.network/tcp/30333/p2p/12D3KooWRubm6c4bViYyvTKnSjMicC35F1jZNrzt3MKC9Hev5vbG /dns4/bootnode3.creditcoin.network/tcp/30333/p2p/12D3KooWSdzZaqoDAncrQmMUi34Nr29TayCr4xPvqcJQc5J434tZ --public-addr /dns4/$EXTIP/tcp/30333 --chain mainnet --mining-key <CreatedSS58address> --base-path /data --port 30333'
+ExecStart=sh -c 'source /etc/bccmn.env && /usr/bin/podman run --security-opt label=type:ctcmn-container.process --cidfile=%t/%n.ctr-id --cgroups=no-conmon --rm --sdnotify=conmon --replace --name ctcmn-container --detach -p 30333:30333 -v /app/ctcmn:/data gluwa/creditcoin:latest --validator --name ctcmn-DEFAULT-$NID --prometheus-external --telemetry-url "wss://telemetry.polkadot.io/submit/ 0" --bootnodes /dns4/bootnode.creditcoin.network/tcp/30333/p2p/12D3KooWAEgDL126EUFxFfdQKiUhmx3BJPdszQHu9PsYsLCuavhb /dns4/bootnode2.creditcoin.network/tcp/30333/p2p/12D3KooWRubm6c4bViYyvTKnSjMicC35F1jZNrzt3MKC9Hev5vbG /dns4/bootnode3.creditcoin.network/tcp/30333/p2p/12D3KooWSdzZaqoDAncrQmMUi34Nr29TayCr4xPvqcJQc5J434tZ --public-addr /dns4/$EXTIP/tcp/30333 --chain mainnet --mining-key <CreatedSS58address> --base-path /data --port 30333'
 ExecStop=/usr/bin/podman stop --ignore --cidfile=%t/%n.ctr-id
 ExecStopPost=/usr/bin/podman rm -f --ignore --cidfile=%t/%n.ctr-id
 Type=notify
@@ -111,7 +111,7 @@ systemctl enable ctcmn-container.service
 # set hostname to match node
 hiid=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 echo "hid=${hiid: -6}" > /tmp/hid
-sh -c 'source /tmp/hid && /usr/bin/hostnamectl set-hostname ctcmn-DEFAULT-$nid'
+sh -c 'source /tmp/hid && /usr/bin/hostnamectl set-hostname ctcmn-DEFAULT-$hid'
 
 # insert SEL mod
 semodule -i /root/ctcmn-container.cil /usr/share/udica/templates/{base_container.cil,net_container.cil}
