@@ -23,12 +23,12 @@ Notables
 # SeLinux profile
 We used Udica (https://github.com/containers/udica) to generate a container-specific policy from the running container, you can too!
 1. podman ps -q # collect the container ID
-2. podman inspect <ContainerID> > container.json # export container configuration
-3. udica -j container.json <my-container-name> # convert to policy file.
+2. podman inspect ContainerID > container.json # export container configuration
+3. udica -j container.json my-container-name # convert to policy file.
 
-That’s it! You just created a custom SELinux security policy <my-container-name>.cil - feel free to examine it with a text editor or continue on to loading the policy.
+That’s it! You just created a custom SELinux security policy my-container-name.cil - feel free to examine it with a text editor or continue on to loading the policy.
 
-4. semodule -i <my-containeri-name>.cil /usr/share/udica/templates/{base_container.cil,net_container.cil,home_container.cil} # Insert policy
+4. semodule -i my-containeri-name.cil /usr/share/udica/templates/{base_container.cil,net_container.cil,home_container.cil} # Insert policy
 5. Update the ExecStart line to leverage the new module & restart the container.
 
 
